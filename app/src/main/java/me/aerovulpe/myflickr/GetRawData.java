@@ -20,36 +20,39 @@ enum DownloadStatus {
 
 public class GetRawData {
     private static final String LOG_TAG = GetRawData.class.getSimpleName();
-    private String mURL;
-    private String mData;
-    private DownloadStatus mDownloadStatus;
+    private String url;
+    private String data;
+    private DownloadStatus downloadStatus;
 
-    public GetRawData(String mURL) {
-        this.mURL = mURL;
-        mDownloadStatus = DownloadStatus.IDLE;
+    public GetRawData() {
+        downloadStatus = DownloadStatus.IDLE;
     }
 
     public void reset() {
-        mDownloadStatus = DownloadStatus.IDLE;
-        mURL = null;
-        mData = null;
+        downloadStatus = DownloadStatus.IDLE;
+        url = null;
+        data = null;
     }
 
-    public DownloadStatus getmDownloadStatus() {
-        return mDownloadStatus;
+    public DownloadStatus getDownloadStatus() {
+        return downloadStatus;
     }
 
-    public String getmData() {
-        return mData;
+    public String getData() {
+        return data;
     }
 
-    public void setmURL(String mURL) {
-        this.mURL = mURL;
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public void execute() {
-        mDownloadStatus = DownloadStatus.PROCESSING;
-        new DownloadRawData().execute(mURL);
+        downloadStatus = DownloadStatus.PROCESSING;
+        new DownloadRawData().execute(url);
     }
 
     class DownloadRawData extends AsyncTask<String, Void, String> {
@@ -102,16 +105,16 @@ public class GetRawData {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            mData = result;
-            Log.v(LOG_TAG, "Data returned was: " + mData);
+            data = result;
+            Log.v(LOG_TAG, "Data returned was: " + data);
 
-            if (mData == null)
-                if (mURL == null)
-                    mDownloadStatus = DownloadStatus.NOT_INTIALISED;
+            if (data == null)
+                if (url == null)
+                    downloadStatus = DownloadStatus.NOT_INTIALISED;
                 else
-                    mDownloadStatus = DownloadStatus.FAILED_OR_EMPTY;
+                    downloadStatus = DownloadStatus.FAILED_OR_EMPTY;
             else
-                mDownloadStatus = DownloadStatus.OK;
+                downloadStatus = DownloadStatus.OK;
         }
     }
 }

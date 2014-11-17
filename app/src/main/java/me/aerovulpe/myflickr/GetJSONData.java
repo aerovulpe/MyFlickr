@@ -16,20 +16,17 @@ import java.util.List;
 public class GetJSONData extends GetRawData {
     private static final String LOG_TAG = GetJSONData.class.getSimpleName();
     private List<Photo> photos;
-    private Uri uri;
 
     public GetJSONData(String tags, boolean matchAll) {
-        super(null);
+        super();
         photos = new ArrayList<Photo>();
-        uri = buildFlickrUri(tags, matchAll);
-        super.setmURL(uri.toString());
+        setUrl(buildFlickrUri(tags, matchAll).toString());
     }
 
     @Override
     public void execute() {
-        String url = uri.toString() ;
-        new DownloadJSONData().execute(url);
-        Log.v(LOG_TAG, "Built URI = " + url);
+        new DownloadJSONData().execute(getUrl());
+        Log.v(LOG_TAG, "Built URI = " + getUrl());
     }
 
     private Uri buildFlickrUri(String tags, boolean matchAll) {
@@ -64,7 +61,7 @@ public class GetJSONData extends GetRawData {
         }
 
         private void processResult() {
-            if (getmDownloadStatus() != DownloadStatus.OK) {
+            if (getDownloadStatus() != DownloadStatus.OK) {
                 Log.e(LOG_TAG, "Error downloading raw data file!");
                 return;
             }
@@ -79,7 +76,7 @@ public class GetJSONData extends GetRawData {
             final String FLICKR_TAGS = "tags";
 
             try {
-                JSONObject rootObject = new JSONObject(getmData());
+                JSONObject rootObject = new JSONObject(getData());
                 JSONArray itemsArray = rootObject.getJSONArray(FLICKR_ITEMS);
                 for (int i = 0; i < itemsArray.length(); i++) {
                     JSONObject photoObject = itemsArray.getJSONObject(i);
