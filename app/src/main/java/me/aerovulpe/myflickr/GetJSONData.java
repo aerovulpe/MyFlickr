@@ -21,23 +21,25 @@ public class GetJSONData extends GetRawData {
     public GetJSONData(String tags, boolean matchAll) {
         super(null);
         photos = new ArrayList<Photo>();
-        buildUri(tags, matchAll);
+        uri = buildFlickrUri(tags, matchAll);
+        super.setmURL(uri.toString());
     }
 
     @Override
     public void execute() {
-        String url = uri.toString();
-        super.setmURL(url);
+        String url = uri.toString() ;
         new DownloadJSONData().execute(url);
         Log.v(LOG_TAG, "Built URI = " + url);
     }
 
-    private boolean buildUri(String tags, boolean matchAll) {
+    private Uri buildFlickrUri(String tags, boolean matchAll) {
         final String FLICKR_API_BASE_URI = "https://api.flickr.com/services/feeds/photos_public.gne";
         final String TAGS_PARAM = "tags";
         final String TAGMODE_PARAM = "tagmode";
         final String FORMAT_PARAM = "format";
         final String NOJSONCALLBACK_PARAM = "nojsoncallback";
+
+        Uri uri;
 
         uri = Uri.parse(FLICKR_API_BASE_URI).buildUpon()
                 .appendQueryParameter(TAGS_PARAM, tags)
@@ -46,7 +48,7 @@ public class GetJSONData extends GetRawData {
                 .appendQueryParameter(NOJSONCALLBACK_PARAM, "1")
                 .build();
 
-        return uri != null;
+        return uri;
     }
 
     public class DownloadJSONData extends DownloadRawData {
