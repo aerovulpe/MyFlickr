@@ -22,8 +22,10 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
-        GetRawData rawJson = new GetRawData("https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=android,lollipop&nojsoncallback=1");
-        rawJson.execute();
+       // GetRawData rawJson = new GetRawData("https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=android,lollipop&nojsoncallback=1");
+        //rawJson.execute();
+        GetJSONData jsonData = new GetJSONData("android, lollipop", true);
+        jsonData.execute();
     }
 
 

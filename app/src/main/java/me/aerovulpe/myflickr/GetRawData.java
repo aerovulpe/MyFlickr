@@ -43,6 +43,10 @@ public class GetRawData {
         return mData;
     }
 
+    public void setmURL(String mURL) {
+        this.mURL = mURL;
+    }
+
     public void execute() {
         mDownloadStatus = DownloadStatus.PROCESSING;
         new DownloadRawData().execute(mURL);
