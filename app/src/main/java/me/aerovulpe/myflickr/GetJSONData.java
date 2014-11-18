@@ -36,9 +36,7 @@ public class GetJSONData extends GetRawData {
         final String FORMAT_PARAM = "format";
         final String NOJSONCALLBACK_PARAM = "nojsoncallback";
 
-        Uri uri;
-
-        uri = Uri.parse(FLICKR_API_BASE_URI).buildUpon()
+        Uri uri = Uri.parse(FLICKR_API_BASE_URI).buildUpon()
                 .appendQueryParameter(TAGS_PARAM, tags)
                 .appendQueryParameter(TAGMODE_PARAM, matchAll ? "all" : "any")
                 .appendQueryParameter(FORMAT_PARAM, "json")
