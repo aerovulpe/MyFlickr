@@ -16,6 +16,7 @@ import java.util.List;
 public class GetJSONData extends GetRawData {
     private static final String LOG_TAG = GetJSONData.class.getSimpleName();
     private List<Photo> photos;
+    private PhotoHandler photoHandler;
 
     public GetJSONData(String tags, boolean matchAll) {
         super();
@@ -27,6 +28,11 @@ public class GetJSONData extends GetRawData {
     public void execute() {
         new DownloadJSONData().execute(getUrl());
         Log.v(LOG_TAG, "Built URI = " + getUrl());
+    }
+
+    public void execute(PhotoHandler photoHandler) {
+        execute();
+        this.photoHandler = photoHandler;
     }
 
     private Uri buildFlickrUri(String tags, boolean matchAll) {
@@ -96,9 +102,7 @@ public class GetJSONData extends GetRawData {
                 Log.e(LOG_TAG, "Error processing JSON data");
             }
 
-            for (Photo photo : photos) {
-                Log.d(LOG_TAG, photo.toString());
-            }
+            photoHandler.onPhotosReceivedListener(photos);
         }
     }
 }

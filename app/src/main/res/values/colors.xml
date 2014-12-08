@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="flickr_primary_background">@color/md_blue_500</color>
+    <color name="flickr_secondary_background">@color/md_blue_700</color>
+    <color name="flickr_accent">@color/md_pink_500</color>
+    <color name="flickr_background">@color/md_grey_600</color>
+    <color name="flickr_primary_text">@color/md_white_1000</color>
+    <color name="flickr_secondary_text">@color/md_yellow_500</color>
+</resources>

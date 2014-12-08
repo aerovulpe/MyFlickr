@@ -1,33 +1,49 @@
 package me.aerovulpe.myflickr;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+
+import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity implements PhotoHandler {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private RecyclerView mRecyclerView;
+    private FlickerRecyclerViewAdapter flickerRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
 
-       // GetRawData rawJson = new GetRawData("https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=android,lollipop&nojsoncallback=1");
-        //rawJson.execute();
-        GetJSONData jsonData = new GetJSONData("android, lollipop", true);
-        jsonData.execute();
+        activateToolbar();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        flickerRecyclerViewAdapter = new FlickerRecyclerViewAdapter(this, null);
+        mRecyclerView.setAdapter(flickerRecyclerViewAdapter);
+
+//        GetRawData rawJson = new GetRawData("https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=android,lollipop&nojsoncallback=1");
+//        rawJson.execute();
+//        new GetJSONData("cat", true).execute(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String query = getSavedPreferenceData(FLICKR_QUERY);
+        if (!query.isEmpty()) {
+            new GetJSONData(query, true).execute(this);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,24 +62,23 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+            return true;
         }
+        ;
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onPhotosReceivedListener(List<Photo> photos) {
+        flickerRecyclerViewAdapter.loadNewData(photos);
+    }
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+    private String getSavedPreferenceData(String key) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPreferences.getString(key, "");
     }
 }
