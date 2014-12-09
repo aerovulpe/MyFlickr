@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,6 +31,22 @@ public class MainActivity extends BaseActivity implements PhotoHandler {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         flickerRecyclerViewAdapter = new FlickerRecyclerViewAdapter(this, null);
         mRecyclerView.setAdapter(flickerRecyclerViewAdapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, mRecyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(MainActivity.this, "Normal Tap", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+//                Toast.makeText(MainActivity.this, "Long Tap", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, ViewPhotoDetailsActivity.class);
+                        intent.putExtra(EXTRA_PHOTO_TRANSFER, flickerRecyclerViewAdapter.getPhoto(position));
+                        startActivity(intent);
+                    }
+                }));
 
 //        GetRawData rawJson = new GetRawData("https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=android,lollipop&nojsoncallback=1");
 //        rawJson.execute();

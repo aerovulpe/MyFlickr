@@ -11,6 +11,7 @@ public class BaseActivity extends ActionBarActivity {
 
     private Toolbar mToolbar;
     public static final String FLICKR_QUERY = "me.aerovulpe.myflickr.FLICKR_QUERY";
+    public static final String EXTRA_PHOTO_TRANSFER = "me.aerovulpe.myflickr.extra.PHOTO_TRANSFER";
 
     protected Toolbar activateToolbar() {
         if (mToolbar == null) {

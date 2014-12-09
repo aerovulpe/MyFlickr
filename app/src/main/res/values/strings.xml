@@ -8,5 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="searchable_label">Search Query</string>
     <string name="searchable_hint">Enter photo tags</string>
+    <string name="title_activity_view_photo_details">Photo Details</string>
 
 </resources>
